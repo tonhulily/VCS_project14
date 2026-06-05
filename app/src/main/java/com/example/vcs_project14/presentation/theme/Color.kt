@@ -2,11 +2,13 @@ package com.example.vcs_project14.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Background = Color(0xFF0F1115)
-val CardColor = Color(0xFF1A1D24)
-val Primary = Color(0xFF00D1B2)
-val Expense = Color(0xFFFF4D6D)
-val Income = Color(0xFF7CFC00)
-val Accent = Color(0xFFFFD166)
-val TextWhite = Color(0xFFF5F7FA)
-val Border = Color(0xFF2A2E39)
+val Background = Color(0xFFF8F8FC)
+val CardColor = Color(0xFFFFFFFF)
+val Primary = Color(0xFF7B61FF)
+val Secondary = Color(0xFFFF9F7F)
+val IncomeGreen = Color(0xFF22C55E)
+val ExpenseRed = Color(0xFFFF5C7A)
+val TextDark = Color(0xFF1E1E2D)
+val GrayText = Color(0xFF8F90A6)
+val GrayLight = Color(0xFFF1F2F6)
+val BorderColor = Color(0xFFE8E8EF)

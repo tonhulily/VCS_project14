@@ -1,23 +1,24 @@
 package com.example.vcs_project14.presentation.theme
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 
-private val AppColors = darkColorScheme(
-    background = Background,
-    primary = Primary,
-    secondary = Accent,
-    surface = CardColor,
-    onBackground = TextWhite,
-    onSurface = TextWhite
-)
+private val FinanceColorScheme =
+    lightColorScheme(
+        primary = Primary,
+        secondary = Secondary,
+        background = Background,
+        surface = CardColor,
+        onPrimary = CardColor,
+        onBackground = TextDark,
+        onSurface = TextDark
+    )
 @Composable
 fun FinanceTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = AppColors,
+        colorScheme = FinanceColorScheme,
         content = content
     )
 }

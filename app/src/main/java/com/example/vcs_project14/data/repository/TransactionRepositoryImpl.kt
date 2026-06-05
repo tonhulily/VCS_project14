@@ -3,7 +3,6 @@ package com.example.vcs_project14.data.repository
 import com.example.vcs_project14.data.local.dao.TransactionDao
 import com.example.vcs_project14.data.local.entity.TransactionEntity
 import com.example.vcs_project14.domain.repository.TransactionRepository
-import kotlinx.coroutines.flow.Flow
 class TransactionRepositoryImpl(
     private val dao: TransactionDao
 ) : TransactionRepository {
@@ -22,22 +21,18 @@ class TransactionRepositoryImpl(
     ) {
         dao.delete(transaction)
     }
-    override fun getAll(): Flow<List<TransactionEntity>> {
-        return dao.getAll()
-    }
+    override fun getAll() = dao.getAll()
     override fun search(
         query: String
-    ): Flow<List<TransactionEntity>> {
-
-        return dao.search(query)
-    }
+    ) = dao.search(query)
+    override fun filterByType(
+        type: String
+    ) = dao.filterByType(type)
     override fun filterByDate(
         startDate: Long,
         endDate: Long
-    ): Flow<List<TransactionEntity>> {
-        return dao.filterByDate(
-            startDate,
-            endDate
-        )
-    }
+    ) = dao.filterByDate(
+        startDate,
+        endDate
+    )
 }

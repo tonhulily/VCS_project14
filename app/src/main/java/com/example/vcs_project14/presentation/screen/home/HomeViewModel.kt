@@ -8,20 +8,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val repository: TransactionRepository
+    private val repository:
+    TransactionRepository
 ) : ViewModel() {
-    private val _transactions = MutableStateFlow<List<TransactionEntity>>(emptyList())
+    private val _transactions =
+        MutableStateFlow<List<TransactionEntity>>(
+            emptyList()
+        )
     val transactions = _transactions.asStateFlow()
-    val totalIncome = transactions.map {
-        list ->
-            list.filter { it.type == "Income" }
-                .sumOf { it.amount }
-    }
-    val totalExpense = transactions.map {
-        list ->
-            list.filter { it.type == "Expense" }
-                .sumOf { it.amount }
-    }
     init {
         loadTransactions()
     }
@@ -38,6 +32,34 @@ class HomeViewModel(
     ) {
         viewModelScope.launch {
             repository.delete(transaction)
+        }
+    }
+    fun totalIncome(): Double {
+        return _transactions.value
+            .filter {
+                it.type == "Income"
+            }
+            .sumOf {
+                it.amount
+            }
+    }
+    fun totalExpense(): Double {
+        return _transactions.value
+            .filter {
+                it.type == "Expense"
+            }
+            .sumOf {
+                it.amount
+            }
+    }
+    fun balance(): Double {
+        return totalIncome() - totalExpense()
+    }
+    fun updateTransaction(
+        transaction: TransactionEntity
+    ) {
+        viewModelScope.launch {
+            repository.update(transaction)
         }
     }
 }

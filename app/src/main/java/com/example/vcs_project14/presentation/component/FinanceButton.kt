@@ -5,8 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.vcs_project14.presentation.theme.Primary
-import com.example.vcs_project14.presentation.theme.TextWhite
+import com.example.vcs_project14.presentation.theme.*
 
 @Composable
 fun FinanceButton(
@@ -15,12 +14,14 @@ fun FinanceButton(
     onClick: () -> Unit
 ) {
     Button(
-        onClick = onClick,
+        enabled = true,
+        onClick = {
+            onClick()
+        },
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Primary,
-            contentColor = TextWhite
+            containerColor = Primary
         )
     ) {
         Text(text)

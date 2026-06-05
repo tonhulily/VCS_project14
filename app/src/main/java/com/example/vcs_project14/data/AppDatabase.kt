@@ -10,18 +10,20 @@ import com.example.vcs_project14.data.local.entity.CategoryEntity
 import com.example.vcs_project14.data.local.entity.TransactionEntity
 @Database(
     entities = [
-        CategoryEntity::class,
-        TransactionEntity::class
+        TransactionEntity::class,
+        CategoryEntity::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
-
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun categoryDao(): CategoryDao
+abstract class AppDatabase :
+    RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
+    abstract fun categoryDao(): CategoryDao
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var INSTANCE:
+                AppDatabase? = null
         fun getDatabase(
             context: Context
         ): AppDatabase {
@@ -29,8 +31,10 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "finance_db"
-                ).build()
+                    "finance_database"
+                )
+                    .fallbackToDestructiveMigration(false)
+                    .build()
                 INSTANCE = instance
                 instance
             }

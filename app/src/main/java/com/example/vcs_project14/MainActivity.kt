@@ -7,7 +7,9 @@ import com.example.vcs_project14.presentation.navigation.NavGraph
 import com.example.vcs_project14.presentation.theme.FinanceTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
         setContent {
             FinanceTheme {
