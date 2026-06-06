@@ -2,7 +2,7 @@ package com.example.vcs_project14.presentation.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +19,7 @@ fun EmptyState() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            imageVector = Icons.Default.AccountBox,
+            imageVector = Icons.Default.AccountBalanceWallet,
             contentDescription = null,
             tint = Primary,
             modifier = Modifier.size(90.dp)

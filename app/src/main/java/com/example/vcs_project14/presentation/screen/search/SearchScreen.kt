@@ -4,10 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -20,7 +23,9 @@ import com.example.vcs_project14.data.repository.TransactionRepositoryImpl
 import com.example.vcs_project14.presentation.component.*
 import com.example.vcs_project14.presentation.theme.*
 import com.example.vcs_project14.presentation.utils.DateUtils
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun SearchScreen(
     navController: NavHostController
@@ -36,10 +41,7 @@ fun SearchScreen(
     }
     val viewModel: SearchViewModel =
         viewModel(
-            factory =
-                SearchViewModelFactory(
-                    repository
-                )
+            factory = SearchViewModelFactory(repository)
         )
     val transactions by viewModel.transactions.collectAsState()
     var query by remember {
@@ -57,13 +59,221 @@ fun SearchScreen(
     var errorMessage by remember {
         mutableStateOf("")
     }
+
+    var showFilterSheet by remember {
+        mutableStateOf(false)
+    }
+    if (showFilterSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showFilterSheet = false
+            },
+            containerColor = CardColor,
+            shape = RoundedCornerShape(
+                topStart = 32.dp,
+                topEnd = 32.dp
+            ),
+            dragHandle = {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .width(60.dp)
+                        .height(6.dp)
+                        .background(
+                            GrayText.copy(alpha = 0.3f),
+                            RoundedCornerShape(100.dp)
+                        )
+                )
+            },
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.5f)
+                    .padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 12.dp,
+                        bottom = 20.dp
+                    ),
+            ) {
+                Text(
+                    text = "Bộ lọc",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
+                Text(
+                    text = "Loại giao dịch",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleMedium
+                )
+                Spacer(
+                    modifier = Modifier.height(12.dp)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    FilterChip(
+                        selected =
+                            selectedFilter == "Expense",
+                        onClick = {
+                            selectedFilter = "Expense"
+                            viewModel.updateType(
+                                "Expense"
+                            )
+                        },
+                        colors =
+                            FilterChipDefaults
+                                .filterChipColors(
+                                    selectedContainerColor = Primary,
+                                    selectedLabelColor = Color.White
+                                ),
+                        label = {
+                            Text("Chi")
+                        }
+                    )
+                    FilterChip(
+                        selected =
+                            selectedFilter == "Income",
+                        onClick = {
+                            selectedFilter = "Income"
+                            viewModel.updateType(
+                                "Income"
+                            )
+                        },
+                        colors =
+                            FilterChipDefaults
+                                .filterChipColors(
+                                    selectedContainerColor = Primary,
+                                    selectedLabelColor = Color.White
+                                ),
+                        label = {
+                            Text("Thu")
+                        }
+                    )
+                    FilterChip(
+                        selected =
+                            selectedFilter == "All",
+                        onClick = {
+                            selectedFilter = "All"
+                            viewModel.updateType(
+                                "All"
+                            )
+                        },
+                        colors =
+                            FilterChipDefaults
+                                .filterChipColors(
+                                    selectedContainerColor = Primary,
+                                    selectedLabelColor = Color.White
+                                ),
+                        label = {
+                            Text("Tất cả")
+                        }
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
+                FinanceTextField(
+                    value = startDate,
+                    onValueChange = {
+                        startDate = it
+                    },
+                    label = "Từ ngày (dd/MM/yyyy)"
+                )
+                Spacer(
+                    modifier = Modifier.height(16.dp)
+                )
+                FinanceTextField(
+                    value = endDate,
+                    onValueChange = {
+                        endDate = it
+                    },
+                    label = "Đến ngày (dd/MM/yyyy)"
+                )
+                if (errorMessage.isNotEmpty()) {
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
+                    Text(
+                        text = errorMessage,
+                        color = ExpenseRed
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            selectedFilter = "All"
+                            startDate = ""
+                            endDate = ""
+                            errorMessage = ""
+                            viewModel.updateType(
+                                "All"
+                            )
+                            viewModel.updateDateRange(
+                                null,
+                                null
+                            )
+                        }
+                    ) {
+                        Text("Xóa lọc")
+                    }
+                    FinanceButton(
+                        text = "Áp dụng",
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            errorMessage = ""
+                            val start =
+                                DateUtils.parseDate(
+                                    startDate
+                                )
+                            val end =
+                                DateUtils.parseDate(
+                                    endDate
+                                )
+                            if (startDate.isNotBlank() && endDate.isNotBlank()) {
+                                if (start == null || end == null) {
+                                    errorMessage = "Sai định dạng ngày"
+                                    return@FinanceButton
+                                }
+                                if (start > end) {
+                                    errorMessage = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
+                                    return@FinanceButton
+                                }
+                                viewModel.updateDateRange(
+                                    start,
+                                    end
+                                )
+                            }
+                            showFilterSheet = false
+                        }
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.height(40.dp)
+                )
+            }
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Tìm kiếm"
-                    )
+                    Text("Tìm kiếm")
                 },
                 navigationIcon = {
                     IconButton(
@@ -99,156 +309,41 @@ fun SearchScreen(
             Spacer(
                 modifier = Modifier.height(20.dp)
             )
-            Text(
-                text = "Loại giao dịch",
-                style =
-                    MaterialTheme
-                        .typography
-                        .titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
             Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                FilterChip(
-                    selected =
-                        selectedFilter == "Expense",
-                    onClick = {
-                        selectedFilter = "Expense"
-                        viewModel.updateType(
-                            "Expense"
-                        )
-                    },
-                    colors =
-                        FilterChipDefaults
-                            .filterChipColors(
-                                selectedContainerColor = Primary,
-                                selectedLabelColor = Color.White
-                            ),
-                    label = {
-                        Text("Chi")
-                    }
-                )
-                FilterChip(
-                    selected =
-                        selectedFilter == "Income",
-                    onClick = {
-                        selectedFilter = "Income"
-                        viewModel.updateType(
-                            "Income"
-                        )
-                    },
-                    colors =
-                        FilterChipDefaults
-                            .filterChipColors(
-                                selectedContainerColor = Primary,
-                                selectedLabelColor = Color.White
-                            ),
-                    label = {
-                        Text("Thu")
-                    }
-                )
-                FilterChip(
-                    selected =
-                        selectedFilter == "All",
-                    onClick = {
-                        selectedFilter = "All"
-                        viewModel.updateType(
-                            "All"
-                        )
-                    },
-                    colors =
-                        FilterChipDefaults
-                            .filterChipColors(
-                                selectedContainerColor = Primary,
-                                selectedLabelColor = Color.White
-                            ),
-                    label = {
-                        Text("Tất cả")
-                    }
-                )
-            }
-            Spacer(
-                modifier = Modifier.height(24.dp)
-            )
-            Text(
-                text = "Khoảng ngày",
-                style =
-                    MaterialTheme
-                        .typography
-                        .titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-            FinanceTextField(
-                value = startDate,
-                onValueChange = {
-                    startDate = it
-                },
-                label = "Từ ngày (dd/MM/yyyy)"
-            )
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-            FinanceTextField(
-                value = endDate,
-                onValueChange = {
-                    endDate = it
-                },
-                label = "Đến ngày (dd/MM/yyyy)"
-            )
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
-            FinanceButton(
-                text = "Lọc theo ngày",
-                onClick = {
-                    errorMessage = ""
-                    val start =
-                        DateUtils.parseDate(
-                            startDate
-                        )
-                    val end =
-                        DateUtils.parseDate(
-                            endDate
-                        )
-                    if (start == null || end == null) {
-                        errorMessage = "Ngày không đúng định dạng dd/MM/yyyy"
-                        return@FinanceButton
-                    }
-                    if (start > end) {
-                        errorMessage = "Ngày bắt đầu phải nhỏ hơn ngày kết thúc"
-                        return@FinanceButton
-                    }
-                    viewModel.updateDateRange(
-                        start,
-                        end
-                    )
-                }
-            )
-            if (errorMessage.isNotEmpty()) {
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
                 Text(
-                    text = errorMessage,
-                    color = ExpenseRed
+                    text = "${transactions.size} giao dịch",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleMedium,
+                    fontWeight = FontWeight.Bold
                 )
+                FilledTonalButton(
+                    onClick = {
+                        showFilterSheet = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FilterList,
+                        contentDescription = null
+                    )
+                    Spacer(
+                        modifier = Modifier.width(8.dp)
+                    )
+                    Text("Bộ lọc")
+                }
             }
             Spacer(
-                modifier = Modifier.height(24.dp)
+                modifier = Modifier.height(18.dp)
             )
             if (transactions.isEmpty()) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 60.dp),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Không có giao dịch",
@@ -271,7 +366,10 @@ fun SearchScreen(
                         transactions,
                         key = { it.id }
                     ) {
-                        TransactionItem(it)
+                        TransactionItem(
+                            transaction = it,
+                            showDeleteSpacing = false
+                        )
                     }
                 }
             }

@@ -24,7 +24,7 @@ object DateUtils {
         return try {
             displayFormat.isLenient = false
             displayFormat.parse(input)?.time
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

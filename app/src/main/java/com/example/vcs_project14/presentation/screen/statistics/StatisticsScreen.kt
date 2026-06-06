@@ -72,10 +72,6 @@ fun StatisticsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding =
-                PaddingValues(
-                    bottom = 120.dp
-                )
         ) {
             item {
                 Card(
@@ -116,8 +112,7 @@ fun StatisticsScreen(
                     shape = RoundedCornerShape(30.dp),
                     colors =
                         CardDefaults.cardColors(
-                            containerColor =
-                                CardColor
+                            containerColor = CardColor
                         )
                 ) {
                     Column(

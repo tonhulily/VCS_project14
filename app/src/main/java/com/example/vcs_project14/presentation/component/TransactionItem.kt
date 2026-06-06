@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,7 +22,8 @@ import java.text.DecimalFormat
 
 @Composable
 fun TransactionItem(
-    transaction: TransactionEntity
+    transaction: TransactionEntity,
+    showDeleteSpacing: Boolean = true
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -43,7 +44,9 @@ fun TransactionItem(
                     start = 20.dp,
                     top = 20.dp,
                     bottom = 20.dp,
-                    end = 80.dp
+                    end =
+                        if (showDeleteSpacing) 80.dp
+                        else 28.dp
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -67,7 +70,7 @@ fun TransactionItem(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Info,
+                        imageVector = Icons.Default.Category,
                         contentDescription = null,
                         tint = Color.White
                     )
@@ -109,31 +112,34 @@ fun TransactionItem(
                 }
             }
             val formatter = DecimalFormat("#,###")
-            Text(
-                text =
-                    if (
-                        transaction.type ==
-                        "Expense"
-                    ) {
-                        "- ${formatter.format(transaction.amount)}"
-                    } else {
-                        "+ ${formatter.format(transaction.amount)}"
-                    },
-                style =
-                    MaterialTheme
-                        .typography
-                        .titleMedium,
-                fontWeight = FontWeight.Bold,
-                color =
-                    if (
-                        transaction.type ==
-                        "Expense"
-                    ) {
-                        ExpenseRed
-                    } else {
-                        IncomeGreen
-                    }
-            )
+            Box(
+                modifier =
+                    Modifier.width(
+                        if (showDeleteSpacing) 120.dp
+                        else 90.dp
+                    ),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Text(
+                    text =
+                        if (transaction.type == "Expense") {
+                            "- ${formatter.format(transaction.amount)}"
+                        } else {
+                            "+ ${formatter.format(transaction.amount)}"
+                        },
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color =
+                        if (transaction.type == "Expense") {
+                            ExpenseRed
+                        } else {
+                            IncomeGreen
+                        }
+                )
+            }
         }
     }
 }

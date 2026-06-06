@@ -11,22 +11,22 @@ sealed class BottomNavItem(
 ) {
     object Home : BottomNavItem(
         "home",
-        "Home",
+        "Trang chủ",
         Icons.Default.Home
     )
     object Search : BottomNavItem(
         "search",
-        "Search",
+        "Tìm kiếm",
         Icons.Default.Search
     )
     object Statistics : BottomNavItem(
         "statistics",
-        "Stats",
-        Icons.Default.Build
+        "Thống kê",
+        Icons.Default.BarChart
     )
     object Category : BottomNavItem(
         "category",
-        "Category",
+        "Danh mục",
         Icons.Default.Info
     )
 }

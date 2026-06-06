@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.vcs_project14.data.local.AppDatabase
 import com.example.vcs_project14.data.local.entity.CategoryEntity
 import com.example.vcs_project14.data.repository.CategoryRepositoryImpl
-import com.example.vcs_project14.presentation.component.FinanceButton
 import com.example.vcs_project14.presentation.component.FinanceTextField
 import com.example.vcs_project14.presentation.theme.*
 
@@ -73,7 +73,7 @@ fun CategoryScreen(
                         }
                     ) {
                         Icon(
-                            Icons.Default.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null
                         )
                     }
@@ -207,7 +207,7 @@ fun CategoryScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Info,
+                                        imageVector = Icons.Default.Category,
                                         contentDescription = null,
                                         tint = Color.White
                                     )
