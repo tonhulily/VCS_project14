@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vcs_project14.data.local.entity.CategoryEntity
 import com.example.vcs_project14.domain.repository.CategoryRepository
+import com.example.vcs_project14.domain.repository.TransactionRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class CategoryViewModel(
-    private val repository: CategoryRepository
+    private val repository: CategoryRepository,
+    private val transactionRepository: TransactionRepository
 ) : ViewModel() {
     private val _categories =
         MutableStateFlow<List<CategoryEntity>>(
@@ -43,6 +45,9 @@ class CategoryViewModel(
     ) {
         viewModelScope.launch {
             repository.delete(category)
+            transactionRepository.markCategoryDeleted(
+                category.name
+            )
         }
     }
     fun updateCategory(

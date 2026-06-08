@@ -35,22 +35,18 @@ class HomeViewModel(
         }
     }
     fun totalIncome(): Double {
-        return _transactions.value
+        return transactions.value
             .filter {
-                it.type == "Income"
+                it.type == "Income" && !it.isCategoryDeleted
             }
-            .sumOf {
-                it.amount
-            }
+            .sumOf { it.amount }
     }
     fun totalExpense(): Double {
-        return _transactions.value
+        return transactions.value
             .filter {
-                it.type == "Expense"
+                it.type == "Expense" && !it.isCategoryDeleted
             }
-            .sumOf {
-                it.amount
-            }
+            .sumOf { it.amount }
     }
     fun balance(): Double {
         return totalIncome() - totalExpense()

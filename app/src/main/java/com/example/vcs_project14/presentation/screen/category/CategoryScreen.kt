@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.vcs_project14.data.local.AppDatabase
 import com.example.vcs_project14.data.local.entity.CategoryEntity
 import com.example.vcs_project14.data.repository.CategoryRepositoryImpl
+import com.example.vcs_project14.data.repository.TransactionRepositoryImpl
 import com.example.vcs_project14.presentation.component.FinanceTextField
 import com.example.vcs_project14.presentation.theme.*
 
@@ -42,11 +43,18 @@ fun CategoryScreen(
                 database.categoryDao()
             )
         }
+    val transactionRepository =
+        remember {
+            TransactionRepositoryImpl(
+                database.transactionDao()
+            )
+        }
     val viewModel: CategoryViewModel =
         viewModel(
             factory =
                 CategoryViewModelFactory(
-                    repository
+                    repository,
+                    transactionRepository
                 )
         )
     val categories by viewModel.categories.collectAsState()

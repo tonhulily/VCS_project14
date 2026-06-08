@@ -89,7 +89,7 @@ fun SearchScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
+                    .fillMaxHeight(0.55f)
                     .padding(
                         start = 20.dp,
                         end = 20.dp,

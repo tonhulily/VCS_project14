@@ -24,4 +24,7 @@ interface TransactionRepository {
         startDate: Long,
         endDate: Long
     ): Flow<List<TransactionEntity>>
+    suspend fun markCategoryDeleted(
+        categoryName: String
+    )
 }

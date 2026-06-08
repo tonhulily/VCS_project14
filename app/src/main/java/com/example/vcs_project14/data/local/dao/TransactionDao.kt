@@ -57,4 +57,14 @@ interface TransactionDao {
         startDate: Long,
         endDate: Long
     ): Flow<List<TransactionEntity>>
+    @Query(
+        """
+    UPDATE transactions
+    SET isCategoryDeleted = 1
+    WHERE category = :categoryName
+    """
+    )
+    suspend fun markCategoryDeleted(
+        categoryName: String
+    )
 }

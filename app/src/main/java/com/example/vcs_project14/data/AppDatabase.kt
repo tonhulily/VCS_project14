@@ -13,7 +13,7 @@ import com.example.vcs_project14.data.local.entity.TransactionEntity
         TransactionEntity::class,
         CategoryEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase :

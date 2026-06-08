@@ -35,4 +35,7 @@ class TransactionRepositoryImpl(
         startDate,
         endDate
     )
+    override suspend fun markCategoryDeleted(categoryName: String) {
+        dao.markCategoryDeleted(categoryName)
+    }
 }

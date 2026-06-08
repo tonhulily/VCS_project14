@@ -27,6 +27,6 @@ sealed class BottomNavItem(
     object Category : BottomNavItem(
         "category",
         "Danh mục",
-        Icons.Default.Info
+        Icons.Default.Category
     )
 }

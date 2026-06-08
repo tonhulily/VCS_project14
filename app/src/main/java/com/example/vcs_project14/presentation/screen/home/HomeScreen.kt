@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.vcs_project14.data.local.AppDatabase
 import com.example.vcs_project14.data.local.entity.TransactionEntity
+import com.example.vcs_project14.data.repository.CategoryRepositoryImpl
 import com.example.vcs_project14.data.repository.TransactionRepositoryImpl
 import com.example.vcs_project14.presentation.component.*
 import com.example.vcs_project14.presentation.theme.*
@@ -60,9 +61,22 @@ fun HomeScreen(
     var editingTransaction: TransactionEntity? by remember {
         mutableStateOf(null)
     }
+    var invalidTransaction: TransactionEntity? by remember {
+        mutableStateOf(null)
+    }
     var showDeleteMessage by remember {
         mutableStateOf(false)
     }
+    val categoryRepository = remember {
+        CategoryRepositoryImpl(
+            database.categoryDao()
+        )
+    }
+    val categories by categoryRepository
+        .getAll()
+        .collectAsState(
+            initial = emptyList()
+        )
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -222,7 +236,9 @@ fun HomeScreen(
                                     }
                                 ) {
                                     Box {
-                                        TransactionItem(transaction)
+                                        TransactionItem(
+                                            transaction = transaction,
+                                        )
                                         Box(
                                             modifier = Modifier
                                                 .matchParentSize()
@@ -230,7 +246,15 @@ fun HomeScreen(
                                         ) {
                                             TextButton(
                                                 onClick = {
-                                                    editingTransaction = transaction
+                                                    val categoryExists =
+                                                        categories.any {
+                                                            it.name == transaction.category
+                                                        }
+                                                    if (categoryExists) {
+                                                        editingTransaction = transaction
+                                                    } else {
+                                                        invalidTransaction = transaction
+                                                    }
                                                 },
                                                 modifier = Modifier.matchParentSize(),
                                                 colors = ButtonDefaults.textButtonColors(
@@ -290,6 +314,45 @@ fun HomeScreen(
                     onSave = { updated ->
                         viewModel.updateTransaction(updated)
                         editingTransaction = null
+                    }
+                )
+            }
+            invalidTransaction?.let { transaction ->
+                AlertDialog(
+                    onDismissRequest = {
+                        invalidTransaction = null
+                    },
+                    title = {
+                        Text("Danh mục đã bị xoá")
+                    },
+                    text = {
+                        Text(
+                            "Danh mục của giao dịch này không còn tồn tại.\nBạn có muốn xoá giao dịch này không?"
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteTransaction(
+                                    transaction
+                                )
+                                invalidTransaction = null
+                            }
+                        ) {
+                            Text(
+                                "Xoá",
+                                color = ExpenseRed
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                invalidTransaction = null
+                            }
+                        ) {
+                            Text("Huỷ")
+                        }
                     }
                 )
             }

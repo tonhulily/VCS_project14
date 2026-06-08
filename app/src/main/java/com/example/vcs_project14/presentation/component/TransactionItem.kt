@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.vcs_project14.data.local.entity.TransactionEntity
 import com.example.vcs_project14.presentation.theme.*
@@ -23,14 +24,16 @@ import java.text.DecimalFormat
 @Composable
 fun TransactionItem(
     transaction: TransactionEntity,
-    showDeleteSpacing: Boolean = true
+    showDeleteSpacing: Boolean = true,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         colors =
             CardDefaults.cardColors(
-                containerColor = CardColor
+                containerColor =
+                    if (transaction.isCategoryDeleted) Color(0xFFE0E0E0)
+                    else CardColor
             ),
         elevation =
             CardDefaults.cardElevation(
@@ -41,17 +44,18 @@ fun TransactionItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = 20.dp,
-                    top = 20.dp,
-                    bottom = 20.dp,
+                    start = 18.dp,
+                    top = 18.dp,
+                    bottom = 18.dp,
                     end =
-                        if (showDeleteSpacing) 80.dp
+                        if (showDeleteSpacing) 64.dp
                         else 28.dp
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
+                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
@@ -78,15 +82,24 @@ fun TransactionItem(
                 Spacer(
                     modifier = Modifier.width(16.dp)
                 )
-                Column {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
                     Text(
                         text = transaction.title,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                         style =
                             MaterialTheme
                                 .typography
                                 .titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = TextDark
+                        color =
+                            if (transaction.isCategoryDeleted) {
+                                GrayText
+                            } else {
+                                TextDark
+                            }
                     )
                     Spacer(
                         modifier = Modifier.height(4.dp)
@@ -115,8 +128,8 @@ fun TransactionItem(
             Box(
                 modifier =
                     Modifier.width(
-                        if (showDeleteSpacing) 120.dp
-                        else 90.dp
+                        if (showDeleteSpacing) 100.dp
+                        else 130.dp
                     ),
                 contentAlignment = Alignment.CenterEnd
             ) {
@@ -133,10 +146,14 @@ fun TransactionItem(
                             .titleMedium,
                     fontWeight = FontWeight.Bold,
                     color =
-                        if (transaction.type == "Expense") {
-                            ExpenseRed
+                        if (transaction.isCategoryDeleted) {
+                            GrayText
                         } else {
-                            IncomeGreen
+                            if (transaction.type == "Expense") {
+                                ExpenseRed
+                            } else {
+                                IncomeGreen
+                            }
                         }
                 )
             }

@@ -1,5 +1,6 @@
 package com.example.vcs_project14.presentation.component
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,7 +23,11 @@ fun FinanceButton(
         shape = RoundedCornerShape(18.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Primary
-        )
+        ),
+        contentPadding = PaddingValues(
+            horizontal = 8.dp,
+            vertical = 10.dp
+        ),
     ) {
         Text(text)
     }

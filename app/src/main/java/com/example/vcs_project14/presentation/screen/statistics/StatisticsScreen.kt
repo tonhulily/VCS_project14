@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.compose.ui.platform.LocalContext
 import com.example.vcs_project14.data.local.AppDatabase
+import com.example.vcs_project14.data.repository.CategoryRepositoryImpl
 import com.example.vcs_project14.data.repository.TransactionRepositoryImpl
 import com.example.vcs_project14.presentation.component.PieChartView
 import com.example.vcs_project14.presentation.theme.*
@@ -33,11 +34,17 @@ fun StatisticsScreen(
                 database.transactionDao()
             )
         }
+    val categoryRepository = remember {
+        CategoryRepositoryImpl(
+            database.categoryDao()
+        )
+    }
     val viewModel: StatisticsViewModel =
         viewModel(
             factory =
                 StatisticsViewModelFactory(
-                    repository
+                    repository,
+                    categoryRepository
                 )
         )
     val chartData by viewModel.chartData.collectAsState()
